@@ -1,0 +1,8 @@
+.border-r-6 {
+    border-radius: 6px;
+}
+
+.jumbotron {
+    background-image: linear-gradient(to right, #007bff, #000) ;
+    color: white;
+}
