@@ -4,6 +4,7 @@ import styles from '../public/css/register.module.css'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { SyncOutlined } from '@ant-design/icons'
+import Link from 'next/link'
 
 export default function Register() {
     const [name, setName] = useState('')
@@ -15,7 +16,7 @@ export default function Register() {
         try {
             setLoading(true)
             //console.table({name, email, password});
-            const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API}/register`, { name, email, password })
+            const { data } = await axios.post(`/api/register`, { name, email, password })
             // console.log('REGISTER RESPONSE', data)
             toast('Registeration successful, please login')
             setLoading(false)
@@ -78,6 +79,10 @@ export default function Register() {
                         </Button>
                     </Form.Item>
                 </Form>
+                <p className='text-center p-3'> 
+                Already registered?
+                <Link href="/login"><a> Log In</a></Link>
+                </p>
             </Card>
 
         </div>
