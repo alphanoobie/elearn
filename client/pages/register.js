@@ -15,7 +15,7 @@ export default function Register() {
         try {
             setLoading(true)
             //console.table({name, email, password});
-            const { data } = await axios.post(`http://localhost:8000/api/register`, { name, email, password })
+            const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API}/register`, { name, email, password })
             // console.log('REGISTER RESPONSE', data)
             toast('Registeration successful, please login')
             setLoading(false)
