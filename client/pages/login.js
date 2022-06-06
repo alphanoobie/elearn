@@ -5,16 +5,16 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import {Context} from "../context"
-import {useRouter} from 'next/router'
+import { Context } from "../context";
+import { useRouter } from "next/router";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   //state
-  const {state, dispatch} = useContext(Context)
+  const { state, dispatch } = useContext(Context);
   //console.log("STATE", state)
 
   //router
@@ -27,12 +27,12 @@ export default function Login() {
       const { data } = await axios.post(`/api/login`, { email, password });
       //console.log("LOGIN RESPONSE", data);
       dispatch({
-        type:"LOGIN",
-        payload: data
-      })
-      window.localStorage.setItem('user', JSON.stringify(data))
+        type: "LOGIN",
+        payload: data,
+      });
+      window.localStorage.setItem("user", JSON.stringify(data));
       //redirect
-      router.push('/');
+      router.push("/");
       //setLoading(false)
     } catch (err) {
       toast(err.response.data);
