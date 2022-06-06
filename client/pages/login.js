@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import {Context} from "../context"
+import {useRouter} from 'next/router'
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -15,6 +16,9 @@ export default function Login() {
   //state
   const {state, dispatch} = useContext(Context)
   //console.log("STATE", state)
+
+  //router
+  const router = useRouter();
 
   const handleSubmit = async () => {
     try {
@@ -26,6 +30,9 @@ export default function Login() {
         type:"LOGIN",
         payload: data
       })
+      window.localStorage.setItem('user', JSON.stringify(data))
+      //redirect
+      router.push('/');
       //setLoading(false)
     } catch (err) {
       toast(err.response.data);
