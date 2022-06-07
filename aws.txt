@@ -1,0 +1,14 @@
+#aws
+AWS_ACCESS_KEY_ID = AKIA5LAAGLV563JUKMQW
+AWS_SECRET_ACCESS_KEY = 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
+AWS_REGION = 'ap-south-1'
+AWS_API_VERSION='2010-12-01'
+
+
+#email
+
+EMAIL_FROM= ishanideshmukh2002@gmail.com
+
+
+User_arn = arn:aws:iam::916975934843:user/ishani
+

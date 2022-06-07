@@ -91,10 +91,16 @@ export default function Login() {
             </Button>
           </Form.Item>
         </Form>
-        <p className="text-center p-3">
-          Not yet registered?
+        <p className="text-center pt-3">
+          Not yet registered?{" "}
           <Link href="/register">
             <a> Register</a>
+          </Link>
+        </p>
+
+        <p className="text-center">
+          <Link href="/forgot-password">
+            <a className="text-danger"> Forgot password</a>
           </Link>
         </p>
       </Card>

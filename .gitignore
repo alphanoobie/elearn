@@ -39,4 +39,4 @@ jspm_packages
 
 #env
 .env.local
-.env 
+.env
