@@ -80,7 +80,7 @@ export default function TopNav() {
           className={styles.submenu}
         >
           <ItemGroup>
-            <Item key ='/user'>
+            <Item key="/user">
               <Link href={"/user"}>
                 <a>Dashboard</a>
               </Link>

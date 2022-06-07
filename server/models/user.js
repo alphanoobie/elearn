@@ -36,7 +36,6 @@ const userSchema = new Schema(
       data: String,
       default: "",
     },
-  
   },
   { timestamps: true }
 );

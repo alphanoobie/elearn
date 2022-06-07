@@ -99,12 +99,10 @@ export default function Login() {
         </p>
 
         <p className="text-center">
-         
           <Link href="/forgot-password">
-            <a className = "text-danger"> Forgot password</a>
+            <a className="text-danger"> Forgot password</a>
           </Link>
         </p>
-
       </Card>
     </div>
   );
