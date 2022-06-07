@@ -77,10 +77,9 @@ export default function TopNav() {
         <SubMenu
           icon={<CoffeeOutlined />}
           title={user && user.name}
-          className={styles.logout}
+          className={styles.submenu}
         >
           <Item
-            className={styles.submenu}
             onClick={logout}
             icon={<LogoutOutlined />}
           >
