@@ -4,10 +4,10 @@ import { readdirSync } from "fs";
 const morgan = require("morgan");
 require("dotenv").config();
 import mongoose from "mongoose";
-import csrf from 'csurf'
-import cookieParser from 'cookie-parser'
+import csrf from "csurf";
+import cookieParser from "cookie-parser";
 
-const csrfProtection = csrf({cookie:true})
+const csrfProtection = csrf({ cookie: true });
 const app = express();
 
 //db
@@ -24,17 +24,17 @@ app.use(morgan("dev"));
 //   console.log("this is my own middleware");
 //   next();
 // });
-app.use(cookieParser())
+app.use(cookieParser());
 
 //route
 readdirSync("./routes").map((r) => app.use("/api", require(`./routes/${r}`)));
 
 //
-app.use(csrfProtection)
+app.use(csrfProtection);
 
-app.get('/api/csrf-token', (req, res)=>{
-  res.json({csrfToken: req.csrfToken() })
-})
+app.get("/api/csrf-token", (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
 
 //port
 const port = process.env.PORT || 8000;

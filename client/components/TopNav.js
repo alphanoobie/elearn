@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import styles from "../public/css/topNav.module.css";
 
-const { Item, SubMenu } = Menu;
+const { Item, SubMenu, ItemGroup } = Menu;
 
 export default function TopNav() {
   const [current, setCurrent] = useState("");
@@ -79,12 +79,16 @@ export default function TopNav() {
           title={user && user.name}
           className={styles.submenu}
         >
-          <Item
-            onClick={logout}
-            icon={<LogoutOutlined />}
-          >
-            Logout
-          </Item>
+          <ItemGroup>
+            <Item key ='/user'>
+              <Link href={"/user"}>
+                <a>Dashboard</a>
+              </Link>
+            </Item>
+            <Item onClick={logout} icon={<LogoutOutlined />}>
+              Logout
+            </Item>
+          </ItemGroup>
         </SubMenu>
       )}
     </Menu>

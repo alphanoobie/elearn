@@ -14,15 +14,17 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { state:{user}} = useContext(Context);
+  const {
+    state: { user },
+  } = useContext(Context);
 
-  const router = useRouter()
+  const router = useRouter();
 
-  useEffect(()=>{
-    if (user!==null){
-      router.push('/')
+  useEffect(() => {
+    if (user !== null) {
+      router.push("/");
     }
-  },[user])
+  }, [user]);
 
   const handleSubmit = async () => {
     try {

@@ -14,17 +14,20 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   //state
-  const { state:{user}, dispatch } = useContext(Context);
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
   //console.log("STATE", state)
 
   //router
   const router = useRouter();
 
-  useEffect(()=>{
-    if(user !== null){
-      router.push('/')
+  useEffect(() => {
+    if (user !== null) {
+      router.push("/");
     }
-  },[user])
+  }, [user]);
 
   const handleSubmit = async () => {
     try {
