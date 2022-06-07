@@ -37,6 +37,9 @@ export default function Register() {
       });
       // console.log('REGISTER RESPONSE', data)
       toast("Registeration successful, please login");
+      setName("");
+      setEmail("");
+      setPassword("");
       setLoading(false);
     } catch (err) {
       toast(err.response.data);

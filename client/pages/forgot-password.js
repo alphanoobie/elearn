@@ -34,7 +34,7 @@ export default function forgotPassword() {
       const { data } = await axios.post("/api/forgot-password", { email });
       setSuccess(true);
       toast("Check your email for the secret code");
-      setLoading(false)
+      setLoading(false);
     } catch (err) {
       setLoading(false);
       toast(err.response.data);
@@ -42,23 +42,26 @@ export default function forgotPassword() {
   };
 
   const handleResetPassword = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // console.log(email, code, newPassword)
     // return
     try {
-      setLoading(true)
-      const { data } = await axios.post('/api/reset-password', {
-        email, code, newPassword
-      })
-      setEmail('')
-      setCode('')
-      setNewPassword('')
-      setLoading(false)
+      setLoading(true);
+      const { data } = await axios.post("/api/reset-password", {
+        email,
+        code,
+        newPassword,
+      });
+      setEmail("");
+      setCode("");
+      setNewPassword("");
+      setLoading(false);
+      toast("Great! Now you can login with your new password");
     } catch (err) {
       setLoading(false);
       toast(err.response.data);
     }
-  }
+  };
 
   return (
     <>
@@ -76,26 +79,27 @@ export default function forgotPassword() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          {success && <>
-            <input
-              placeholder="Enter secret code"
-              type="text"
-              className="form-control mb-4 p-4"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              required
-            />
+          {success && (
+            <>
+              <input
+                placeholder="Enter secret code"
+                type="text"
+                className="form-control mb-4 p-4"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                required
+              />
 
-            <input
-              placeholder="Enter new password"
-              type="password"
-              className="form-control mb-4 p-4"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-
-          </>}
+              <input
+                placeholder="Enter new password"
+                type="password"
+                className="form-control mb-4 p-4"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+            </>
+          )}
           <button
             type="Submit"
             className="btn btn-primary btn-block p-2"
