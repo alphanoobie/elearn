@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Card, Form, Input, Button } from "antd";
 import styles from "../public/css/register.module.css";
 import axios from "axios";
@@ -14,11 +14,18 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   //state
-  const { state, dispatch } = useContext(Context);
+  const { state:{user}, dispatch } = useContext(Context);
+  //const {user} = state
   //console.log("STATE", state)
 
   //router
   const router = useRouter();
+
+  useEffect(()=>{
+    if(user!=null){
+      router.push('./')
+    }
+  },[user])
 
   const handleSubmit = async () => {
     try {
