@@ -25,7 +25,7 @@ export default function forgotPassword() {
 
   useEffect(() => {
     if (user !== null) router.push("/");
-  }, []);
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +66,7 @@ export default function forgotPassword() {
   return (
     <>
       <h1 className="jumbotron text-center bg-primary square">
-        Forgot newPassword
+        Forgot Password
       </h1>
 
       <div className="container col-md-4 offset-nd-4 pd-5">
