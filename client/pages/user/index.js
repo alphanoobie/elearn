@@ -9,8 +9,7 @@ export default function UserIndex() {
 
   return (
     <UserRoute>
-      <h1 className="jumbotron text-center">
-      </h1>
+      <h1 className="jumbotron text-center">User Dashboard</h1>
     </UserRoute>
   );
 }

@@ -41,7 +41,7 @@ export default function Login() {
       });
       window.localStorage.setItem("user", JSON.stringify(data));
       //redirect
-      router.push("/");
+      router.push("/user");
       //setLoading(false)
     } catch (err) {
       toast(err.response.data);

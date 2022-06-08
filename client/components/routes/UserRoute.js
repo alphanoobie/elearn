@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { SyncOutlined } from "@ant-design/icons";
+import UserNav from "../nav/UserNav";
 
 export default function UserRoute({ children }) {
   const [ok, setOk] = useState(false);
@@ -33,7 +34,14 @@ export default function UserRoute({ children }) {
           className="d-flex justify-content-center display-1 text-primary"
         />
       ) : (
-        <>{children}</>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-2">
+              <UserNav />
+              <div className="col-md-10">{children}</div>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
