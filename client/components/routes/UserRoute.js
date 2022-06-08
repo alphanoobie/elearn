@@ -38,8 +38,8 @@ export default function UserRoute({ children }) {
           <div className="row">
             <div className="col-md-2">
               <UserNav />
-              <div className="col-md-10">{children}</div>
             </div>
+            <div className="col-md-10">{children}</div>
           </div>
         </div>
       )}
