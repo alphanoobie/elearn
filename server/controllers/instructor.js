@@ -5,10 +5,10 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET)
 export const makeInstructor =async(req, res) => {
     try {
         // find user from db
-    const user = await User.findById(req.user._id).exec()
+    const user = await User.findById(req.auth._id).exec()
     //if user doesnt have stripe-account_id, create new
     if (!user.stripe_account_id){
-        const account = await stripe.accounts.create({type:"express"})
+        const account = await stripe.accounts.create({type:"standard"})
         // console.log('ACCOUNT =>', account.id)
         user.stripe_account_id = account.id
         user.save()
