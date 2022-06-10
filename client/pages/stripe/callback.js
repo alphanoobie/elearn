@@ -4,13 +4,18 @@ import {SyncOutlined} from '@ant-design/icons'
 import axios from 'axios'
 
 export default function StripeCallback() {
-    const {state:{user}} = useContext(Context)
+    const {state:{user}, dispatch} = useContext(Context)
 
     useEffect(()=>{
         if(user){
             axios.post('/api/get-account-status').then(res =>{
-                // window.location.href='/instructor'
-                console.log(res)
+                dispatch({
+                    type:'LOGIN',
+                    payload: res.data,
+                })
+                window.localStorage.setItem('user', JSON.stringify(res.data))
+                window.location.href='/instructor'
+                // console.log(res)
             })
         }
     },[user])

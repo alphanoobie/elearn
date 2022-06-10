@@ -5,6 +5,7 @@ import {
   AppstoreOutlined,
   CarryOutOutlined,
   CoffeeOutlined,
+  DashboardOutlined,
   LoginOutlined,
   LogoutOutlined,
   TeamOutlined,
@@ -40,7 +41,7 @@ export default function TopNav() {
   };
 
   return (
-    <Menu mode="horizontal" selectedKeys={[current]}>
+    <Menu mode="horizontal" selectedKeys={[current]} className="mb-2">
       <Item
         key="/"
         onClick={(e) => setCurrent(e.key)}
@@ -73,6 +74,7 @@ export default function TopNav() {
         </Item>
       )}
 
+
       {user === null && (
         <>
           <Item
@@ -97,18 +99,34 @@ export default function TopNav() {
         </>
       )}
 
+
       {user !== null && (
         <SubMenu
           icon={<CoffeeOutlined />}
           title={user && user.name}
-          className={styles.submenu}
+          className={styles.floatRight}
         >
           <ItemGroup>
-            <Item key="/user">
+            <Item 
+            key="/user"
+            icon={<DashboardOutlined />}
+            >
               <Link href={"/user"}>
                 <a>Dashboard</a>
               </Link>
             </Item>
+
+            {user && user.role && user.role.includes("Instructor") && (
+              <Item
+                key="/instructor"
+                icon={<TeamOutlined />}
+              >
+                <Link href="/instructor">
+                  <a>Instructor</a>
+                </Link>
+              </Item>
+            )}
+
             <Item onClick={logout} icon={<LogoutOutlined />}>
               Logout
             </Item>
