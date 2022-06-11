@@ -74,7 +74,6 @@ export default function TopNav() {
         </Item>
       )}
 
-
       {user === null && (
         <>
           <Item
@@ -99,7 +98,6 @@ export default function TopNav() {
         </>
       )}
 
-
       {user !== null && (
         <SubMenu
           icon={<CoffeeOutlined />}
@@ -107,20 +105,14 @@ export default function TopNav() {
           className={styles.floatRight}
         >
           <ItemGroup>
-            <Item 
-            key="/user"
-            icon={<DashboardOutlined />}
-            >
+            <Item key="/user" icon={<DashboardOutlined />}>
               <Link href={"/user"}>
                 <a>Dashboard</a>
               </Link>
             </Item>
 
             {user && user.role && user.role.includes("Instructor") && (
-              <Item
-                key="/instructor"
-                icon={<TeamOutlined />}
-              >
+              <Item key="/instructor" icon={<TeamOutlined />}>
                 <Link href="/instructor">
                   <a>Instructor</a>
                 </Link>
