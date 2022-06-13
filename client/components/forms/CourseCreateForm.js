@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Select } from "antd";
+import { Button, Select, Avatar, Badge } from "antd";
 
 const { Option } = Select;
 
@@ -9,6 +9,9 @@ export default function CourseCreateForm({
   handleSubmit,
   values,
   setValues,
+  preview,
+  uploadButtonText,
+  handleImageRemove
 }) {
   const children = [];
   for (let i = 100; i <= 1000; i = i + 100) {
@@ -84,20 +87,28 @@ export default function CourseCreateForm({
         <div className="col">
           <div className="form-group">
             <label
-              style={{ width: "100%", textAlign: "left" }}
               className="btn btn-outline-secondary btn-block text-left"
             >
-              {values.loading ? "Uploading" : "Image Upload"}
+              {uploadButtonText}
               <input
                 type="file"
                 name="image"
-                onChnage={handleImage}
+                onChange={handleImage}
                 accept="image/*"
                 hidden
               />
             </label>
           </div>
         </div>
+
+        {preview && ( 
+          <div className="pt-3">
+          <Badge count="X" onClick={handleImageRemove}>
+            <Avatar width={200} src={preview}/>
+        </Badge>
+        </div>
+          
+        )}
       </div>
 
       <div className="row pt-3">
