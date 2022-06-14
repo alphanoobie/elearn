@@ -49,7 +49,7 @@ export default function CourseCreateForm({
               size="large"
               style={{ width: "100%" }}
               value={values.paid}
-              onChange={(v) => setValues({ ...values, paid: !values.paid })}
+              onChange={(v) => setValues({ ...values, paid: !values.v, price:0 })}
             >
               <Option value={true}>Paid</Option>
               <Option value={false}>Free</Option>
