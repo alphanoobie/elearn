@@ -11,7 +11,7 @@ export default function CourseCreateForm({
   setValues,
   preview,
   uploadButtonText,
-  handleImageRemove
+  handleImageRemove,
 }) {
   const children = [];
   for (let i = 100; i <= 1000; i = i + 100) {
@@ -49,7 +49,9 @@ export default function CourseCreateForm({
               size="large"
               style={{ width: "100%" }}
               value={values.paid}
-              onChange={(v) => setValues({ ...values, paid: !values.v, price:0 })}
+              onChange={(v) =>
+                setValues({ ...values, paid: !values.v, price: 0 })
+              }
             >
               <Option value={true}>Paid</Option>
               <Option value={false}>Free</Option>
@@ -86,9 +88,7 @@ export default function CourseCreateForm({
       <div className="form-row pt-3">
         <div className="col">
           <div className="form-group">
-            <label
-              className="btn btn-outline-secondary btn-block text-left"
-            >
+            <label className="btn btn-outline-secondary btn-block text-left">
               {uploadButtonText}
               <input
                 type="file"
@@ -101,13 +101,12 @@ export default function CourseCreateForm({
           </div>
         </div>
 
-        {preview && ( 
+        {preview && (
           <div className="pt-3">
-          <Badge count="X" onClick={handleImageRemove}>
-            <Avatar width={200} src={preview}/>
-        </Badge>
-        </div>
-          
+            <Badge count="X" onClick={handleImageRemove}>
+              <Avatar width={200} src={preview} />
+            </Badge>
+          </div>
         )}
       </div>
 

@@ -1,5 +1,5 @@
 var { expressjwt: jwt } = require("express-jwt");
-import User from "../models/user"
+import User from "../models/user";
 
 export const requireSignIn = jwt({
   getToken: (req, res) => req.cookies.token,
@@ -7,16 +7,15 @@ export const requireSignIn = jwt({
   algorithms: ["HS256"],
 });
 
-export const isInstructor = async(req,res,next) => {
-  try{
-    const user = await User.findById(req.auth._id).exec()
-    if (!user.role.includes('Instructor')){
-      return res.sendStatus(403)
+export const isInstructor = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.auth._id).exec();
+    if (!user.role.includes("Instructor")) {
+      return res.sendStatus(403);
+    } else {
+      next();
     }
-    else {
-      next()
-    }
-  } catch (err){
-    console.log(err)
+  } catch (err) {
+    console.log(err);
   }
-}
+};

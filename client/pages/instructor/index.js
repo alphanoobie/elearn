@@ -1,19 +1,18 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import InstructorRoute from "../../components/routes/InstructorRoute";
 
 export default function InstructorIndex() {
-
-  const [courses, setcourses] = useState([])
+  const [courses, setcourses] = useState([]);
 
   useEffect(() => {
-    loadCourses()
-  }, [])
+    loadCourses();
+  }, []);
 
   const loadCourses = async () => {
-    const { data } = await axios.get('api/instructor-courses')
-    setcourses(data)
-  }
+    const { data } = await axios.get("api/instructor-courses");
+    setcourses(data);
+  };
 
   return (
     <InstructorRoute>
