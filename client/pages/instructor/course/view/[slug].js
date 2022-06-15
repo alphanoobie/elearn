@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import InstructorRoute from "../../../../components/routes/InstructorRoute";
 import axios from "axios";
-import { Avatar, Tooltip } from "antd";
-import { CheckOutlined, EditOutlined } from "@ant-design/icons";
+import { Avatar, Button, Modal, Tooltip } from "antd";
+import { CheckOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 
 export default function CourseView() {
   const [course, setCourse] = useState({});
+  const [visible, setVisible] = useState(false);
 
   const router = useRouter();
   const { slug } = router.query;
@@ -60,13 +61,37 @@ export default function CourseView() {
                 </div>
               </div>
 
-              <hr/>
+              <hr />
 
               <div className="row">
                 <div className="column">
                   <ReactMarkdown children={course.description} />
                 </div>
               </div>
+
+              <br/>
+
+              <div className="row">
+                <Button
+                  onClick={() => setVisible(true)}
+                  className="col-md-6 offset-md-3 text-center"
+                  type="primary"
+                  shape="round"
+                  icon={<UploadOutlined />}
+                  size="large"
+                >
+                  Add Lesson
+                </Button>
+              </div>
+              <Modal title="+ Add Lesson" 
+              centered 
+              visible={visible}
+              onCancel={()=>setVisible(false)}
+              footer={null}
+              >
+                Add Lesson
+
+              </Modal>
             </div>
           </div>
         )}
