@@ -6,7 +6,7 @@ import { Avatar, Button, Modal, Tooltip } from "antd";
 import { CheckOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import AddLessonForm from "../../../../components/forms/AddLessonForm";
-import toast from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function CourseView() {
   const [course, setCourse] = useState({});
@@ -38,11 +38,11 @@ export default function CourseView() {
     console.log(values);
   };
 
-  const handleVideo = async(e) => {
+  const handleVideo = async (e) => {
     try {
-      setUploading(true);
       const file = e.target.files[0];
       setUploadButtonText(file.name);
+      setUploading(true);
 
       const videoData = new FormData();
       videoData.append("video", file);
