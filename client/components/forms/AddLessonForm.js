@@ -1,6 +1,6 @@
-import { Button, Progress } from "antd";
-
+import { Button, Progress, Tooltip } from "antd";
 import React from "react";
+import { CloseCircleFilled } from "@ant-design/icons";
 
 export default function AddLessonForm({
   values,
@@ -10,6 +10,7 @@ export default function AddLessonForm({
   uploadButtonText,
   handleVideo,
   progress,
+  handleVideoRemove,
 }) {
   return (
     <div className="container pt-3">
@@ -33,10 +34,20 @@ export default function AddLessonForm({
           placeholder="Content"
         />
 
-        <label className="btn btn-dark btn-block text-left mt-3">
-          {uploadButtonText}
-          <input onChange={handleVideo} type="file" accept="video/*" hidden />
-        </label>
+        <div className="d-flex justify-content-center">
+          <label className="btn btn-dark btn-block text-left mt-3">
+            {uploadButtonText}
+            <input onChange={handleVideo} type="file" accept="video/*" hidden />
+          </label>
+
+          {!uploading && values.video.Location && (
+            <Tooltip title="Remove">
+              <span onClick={handleVideoRemove} className="pt-3 pl-3">
+                <CloseCircleFilled className="text-danger d-flex justify-content-center pt-4 pl-3 pointer" />
+              </span>
+            </Tooltip>
+          )}
+        </div>
 
         {progress > 0 && (
           <Progress
