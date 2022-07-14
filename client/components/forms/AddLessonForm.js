@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Progress } from "antd";
 
 import React from "react";
 
@@ -8,7 +8,8 @@ export default function AddLessonForm({
   handleAddLesson,
   uploading,
   uploadButtonText,
-  handleVideo
+  handleVideo,
+  progress,
 }) {
   return (
     <div className="container pt-3">
@@ -33,9 +34,17 @@ export default function AddLessonForm({
         />
 
         <label className="btn btn-dark btn-block text-left mt-3">
-            {uploadButtonText}
+          {uploadButtonText}
           <input onChange={handleVideo} type="file" accept="video/*" hidden />
         </label>
+
+        {progress > 0 && (
+          <Progress
+            className="d-flex justify-content-center pt-2"
+            percent={progress}
+            steps={10}
+          />
+        )}
 
         <Button
           onClick={handleAddLesson}
@@ -44,7 +53,7 @@ export default function AddLessonForm({
           type="primary"
           loading={uploading}
           shape="round"
-          style={{display:'block'}}
+          style={{ display: "block" }}
         >
           Save
         </Button>

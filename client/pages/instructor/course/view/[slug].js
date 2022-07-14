@@ -141,6 +141,7 @@ export default function CourseView() {
                   uploading={uploading}
                   uploadButtonText={uploadButtonText}
                   handleVideo={handleVideo}
+                  progress={progress}
                 />
               </Modal>
             </div>
