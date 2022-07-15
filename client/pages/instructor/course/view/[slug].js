@@ -1,173 +1,158 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import InstructorRoute from "../../../../components/routes/InstructorRoute";
-import axios from "axios";
-import { Avatar, Button, Modal, Tooltip } from "antd";
-import { CheckOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
-import ReactMarkdown from "react-markdown";
-import AddLessonForm from "../../../../components/forms/AddLessonForm";
-import { toast } from "react-toastify";
+import AWS from "aws-sdk";
+import { nanoid } from "nanoid";
+import Course from "../models/course";
+import slugify from "slugify";
+import { readFileSync } from "fs";
 
-export default function CourseView() {
-  const [course, setCourse] = useState({});
-  const [visible, setVisible] = useState(false);
-  const [values, setValues] = useState({
-    title: "",
-    content: "",
-    video: {},
-  });
-  const [uploading, setUploading] = useState(false);
-  const [uploadButtonText, setUploadButtonText] = useState("Upload Video");
-  const [progress, setProgress] = useState(0);
+const awsConfig = {
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+  apiVersion: process.env.AWS_API_VERSION,
+};
 
-  const router = useRouter();
-  const { slug } = router.query;
+const S3 = new AWS.S3(awsConfig);
 
-  useEffect(() => {
-    loadCourse();
-  }, [slug]);
+export const uploadImage = async (req, res) => {
+  // console.log(req.body)
+  try {
+    const { image } = req.body;
+    if (!image) return res.status(400).send("No Image");
 
-  const loadCourse = async () => {
-    const { data } = await axios.get(`/api/course/${slug}`);
-    setCourse(data);
-  };
+    //prepare image
+    const base64Data = new Buffer.from(
+      image.replace(/^data:image\/\w+;base64,/, ""),
+      "base64"
+    );
 
-  //Functions for adding lessons
-  const handleAddLesson = (e) => {
-    e.preventDefault();
-    console.log(values);
-  };
+    const type = image.split(";")[0].split("/")[1];
 
-  const handleVideo = async (e) => {
-    try {
-      const file = e.target.files[0];
-      setUploadButtonText(file.name);
-      setUploading(true);
+    //image Params
+    const params = {
+      Bucket: "elearn-course-bucket",
+      Key: `${nanoid()}.${type}`,
+      Body: base64Data,
+      ACL: "public-read",
+      ContentEncoding: "base64",
+      ContentType: `image/${type}`,
+    };
 
-      const videoData = new FormData();
-      videoData.append("video", file);
-      //save progress bar and send video as form data to backend
-
-      const { data } = await axios.post("/api/course/video-upload", videoData, {
-        onUploadProgress: (e) => {
-          setProgress(Math.round((100 * e.loaded) / e.total));
-        },
-      });
-
-      //once res is received
+    //upload to s3
+    S3.upload(params, (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.sendStatus(400);
+      }
       console.log(data);
-      setValues({ ...values, video: data });
-      setUploading(false);
-    } catch (error) {
-      setUploading(false);
-      console.log(error);
-      toast("Video Upload Failed");
-    }
-    // console.log(file)
-  };
+      res.send(data);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-  const handleVideoRemove = async () => {
-    //  console.log('handle remove video')
-    try {
-      setUploading(true);
-      const { data } = await axios.post(
-        "api/course/remove-video",
-        values.video
-      );
+export const removeImage = async (req, res) => {
+  try {
+    const { image } = req.body;
+    const params = {
+      Bucket: image.Bucket,
+      Key: image.Key,
+    };
+
+    //send remove req
+    S3.deleteObject(params, (err, data) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(400);
+      }
+      res.send({ ok: true });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const create = async (req, res) => {
+  // console.log("Create Course", req.body)
+  try {
+    const alreadyExist = await Course.findOne({
+      slug: slugify(req.body.name.toLowerCase()),
+    });
+    if (alreadyExist) {
+      return res.status(400).send("Title is taken");
+    }
+
+    const course = await new Course({
+      slug: slugify(req.body.name),
+      instructor: req.auth._id,
+      ...req.body,
+    }).save();
+    res.json(course);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send("Course create failed");
+  }
+};
+
+export const read = async (req, res) => {
+  try {
+    const course = await Course.findOne({ slug: req.params.slug })
+      .populate("instructor", "_id name")
+      .exec();
+    res.json(course);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const uploadVideo = async (req, res) => {
+  try {
+    const { video } = req.files;
+    // console.log(video)
+    if (!video) {
+      return res.status(400).send("No Video");
+    }
+
+    const params = {
+      Bucket: "elearn-course-bucket",
+      Key: `${nanoid()}.${video.type.split("/")[1]}`,
+      Body: readFileSync(video.path),
+      ACL: "public-read",
+      ContentType: video.type,
+    };
+
+    S3.upload(params, (err, data) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(400);
+      }
       console.log(data);
-      setValues({ ...values, video: {} });
-      setUploading(false);
-      setUploadButtonText("Upload another video");
-    } catch (error) {
-      setUploading(false);
-      console.log(error);
-      toast("Video Upload Failed");
-    }
-  };
+      res.send(data);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  return (
-    <InstructorRoute>
-      <div className="container-fluid pt-3">
-        {/* <pr>{JSON.stringify(course, null, 4)}</pr> */}
 
-        {course && (
-          <div className="container-fluid pt-1">
-            <div className="media pt-2">
-              <Avatar
-                size={80}
-                src={course.image ? course.image.Location : "/course.png"}
-              />
-              <div className="media-body pl-2">
-                <div className="row">
-                  <div className="col">
-                    <h5 className="mt-2 text-primary">{course.name}</h5>
-                    <p style={{ marginTop: "-10px", fontSize: "12px" }}>
-                      {course.lessons && course.lessons.length} Lessons
-                    </p>
-                    <p style={{ marginTop: "-10px", fontSize: "12px" }}>
-                      {course.category}
-                    </p>
-                  </div>
+export const removeVideo = async (req, res) => {
+  try {
+    const { Bucket, Key } = req.body;
+    console.log('===========>', req.body)
+    const params = {
+      Bucket,
+      Key,
+    };
 
-                  <div className="d-flex">
-                    <Tooltip title="Edit">
-                      <EditOutlined
-                        style={{ marginRight: 20 }}
-                        className="h5 pointer text-warning"
-                      />
-                    </Tooltip>
-
-                    <Tooltip title="Publish">
-                      <CheckOutlined className="h5 pointer text-danger" />
-                    </Tooltip>
-                  </div>
-                </div>
-              </div>
-
-              <hr />
-
-              <div className="row">
-                <div className="column">
-                  <ReactMarkdown children={course.description} />
-                </div>
-              </div>
-
-              <br />
-
-              <div className="row">
-                <Button
-                  onClick={() => setVisible(true)}
-                  className="col-md-6 offset-md-3 text-center"
-                  type="primary"
-                  shape="round"
-                  icon={<UploadOutlined />}
-                  size="large"
-                >
-                  Add Lesson
-                </Button>
-              </div>
-              <Modal
-                title="+ Add Lesson"
-                centered
-                visible={visible}
-                onCancel={() => setVisible(false)}
-                footer={null}
-              >
-                <AddLessonForm
-                  values={values}
-                  setValues={setValues}
-                  handleAddLesson={handleAddLesson}
-                  uploading={uploading}
-                  uploadButtonText={uploadButtonText}
-                  handleVideo={handleVideo}
-                  progress={progress}
-                  handleVideoRemove={handleVideoRemove}
-                />
-              </Modal>
-            </div>
-          </div>
-        )}
-      </div>
-    </InstructorRoute>
-  );
-}
+    S3.deleteObject(params, (err, data) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(400);
+      }
+      console.log(data);
+      res.send({ ok: true });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
