@@ -33,9 +33,24 @@ export default function CourseView() {
   };
 
   //Functions for adding lessons
-  const handleAddLesson = (e) => {
+  const handleAddLesson = async (e) => {
     e.preventDefault();
-    console.log(values);
+    // console.log(values);
+    try {
+      const { data } = await axios.post(
+        `/api/course/lesson/${slug}/${course.instructor._id}`,
+        values
+      );
+      // console.log(data)
+      setValues({ ...values, title: "", content: "", video: {} });
+      setVisible(false);
+      setUploadButtonText("Upload Video");
+      setCourse(data);
+      toast("Lesson added");
+    } catch (error) {
+      console.log(error);
+      toast("Lesson add failed");
+    }
   };
 
   const handleVideo = async (e) => {
@@ -48,11 +63,15 @@ export default function CourseView() {
       videoData.append("video", file);
       //save progress bar and send video as form data to backend
 
-      const { data } = await axios.post(`/api/course/video-upload/${course.instructor._id}`, videoData, {
-        onUploadProgress: (e) => {
-          setProgress(Math.round((100 * e.loaded) / e.total));
-        },
-      });
+      const { data } = await axios.post(
+        `/api/course/video-upload/${course.instructor._id}`,
+        videoData,
+        {
+          onUploadProgress: (e) => {
+            setProgress(Math.round((100 * e.loaded) / e.total));
+          },
+        }
+      );
 
       //once res is received
       console.log(data);
@@ -88,8 +107,7 @@ export default function CourseView() {
   return (
     <InstructorRoute>
       <div className="container-fluid pt-3">
-        {/* <pr>{JSON.stringify(course, null, 4)}</pr> */}
-
+        {/* <pre>{JSON.stringify(course, null, 4)}</pre> */}
         {course && (
           <div className="container-fluid pt-1">
             <div className="media pt-2">
