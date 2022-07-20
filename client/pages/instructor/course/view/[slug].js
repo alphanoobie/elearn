@@ -131,6 +131,7 @@ export default function CourseView() {
                   <div className="d-flex">
                     <Tooltip title="Edit">
                       <EditOutlined
+                        onClick={()=> router.push(`/instructor/course/edit/${slug}`)}
                         style={{ marginRight: 20 }}
                         className="h5 pointer text-warning"
                       />
