@@ -22,16 +22,19 @@ export default function CourseEdit() {
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
 
   const router = useRouter();
-  const {slug} = router.query
+  const { slug } = router.query;
 
   useEffect(() => {
-    loadCourse()
+    loadCourse();
   }, [slug]);
 
   const loadCourse = async () => {
-    const {data} = await axios.get(`/api/course/${slug}`)
-    setValues(data)
-  }
+    const { data } = await axios.get(`/api/course/${slug}`);
+    setValues(data);
+    if (data && data.image) {
+      setImage(data.image);
+    }
+  };
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -63,13 +66,27 @@ export default function CourseEdit() {
     });
   };
 
-
+  const handleImageRemove = async (e) => {
+    // console.log('remove inmage')
+    try {
+      setValues({ ...values, loading: true });
+      const res = await axios.post("/api/course/remove-image", { image });
+      setImage({});
+      setPreview("");
+      setUploadButtonText("Upload Image");
+      setValues({ ...values, loading: false });
+    } catch (err) {
+      console.log(err);
+      setValues({ ...values, loading: false });
+      toast("Image upload failed");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(values);
     try {
-      const { data } = await axios.put("/api/course", {
+      const { data } = await axios.put(`/api/course/${slug}`, {
         ...values,
         image,
       });
@@ -89,13 +106,14 @@ export default function CourseEdit() {
         {
           <CourseCreateForm
             handleSubmit={handleSubmit}
+            handleImageRemove={handleImageRemove}
             handleImage={handleImage}
             handleChange={handleChange}
             values={values}
             setValues={setValues}
             preview={preview}
             uploadButtonText={uploadButtonText}
-            editPage = {true}
+            editPage={true}
           />
         }
       </div>
