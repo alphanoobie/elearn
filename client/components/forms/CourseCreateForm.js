@@ -112,7 +112,7 @@ export default function CourseCreateForm({
               </div>
             )}
 
-            {editPage && values.image && <Avatar width={200} src={values.image.Location} />}
+            {editPage && values.image && <Avatar className="mt-3" width={200} src={values.image.Location} />}
           </div>
 
           <div className="row pt-3">
