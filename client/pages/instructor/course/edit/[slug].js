@@ -5,6 +5,9 @@ import Resizer from "react-image-file-resizer";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { List, Avatar } from "antd";
+
+const { Item } = List;
 
 export default function CourseEdit() {
   const [values, setValues] = useState({
@@ -15,6 +18,7 @@ export default function CourseEdit() {
     paid: true,
     category: "",
     loading: false,
+    lessons: [],
   });
 
   const [image, setImage] = useState({});
@@ -30,7 +34,9 @@ export default function CourseEdit() {
 
   const loadCourse = async () => {
     const { data } = await axios.get(`/api/course/${slug}`);
-    setValues(data);
+    if (data) {
+      setValues(data);
+    }
     if (data && data.image) {
       setImage(data.image);
     }
@@ -98,6 +104,30 @@ export default function CourseEdit() {
     }
   };
 
+  const handleDrag = (e, index) => {
+    // console.log('On Drag =>', index)
+    e.dataTransfer.setData("itemIndex", index);
+  };
+
+  const handleDrop = async (e, index) => {
+    // console.log('On Drop =>', index)
+
+    const movingItemIndex = e.dataTransfer.getData("itemIndex");
+    const targetItemIndex = index;
+    let allLessons = values.lessons;
+
+    let movingItem = allLessons[movingItemIndex];
+    allLessons.splice(movingItemIndex, 1);
+    allLessons.splice(targetItemIndex, 0, movingItem);
+
+    setValues({ ...values, lessons: [...allLessons] });
+    const { data } = await axios.put(`/api/course/${slug}`, {
+      ...values,
+      image,
+    });
+    toast("Lessons rearranged successfully");
+  };
+
   return (
     <InstructorRoute>
       <h1 className="jumbotron text-center">Edit Course</h1>
@@ -116,6 +146,31 @@ export default function CourseEdit() {
             editPage={true}
           />
         }
+      </div>
+
+      <hr />
+
+      <div className="row pb-3">
+        <div className="col lesson-list">
+          <h4>{values && values.lessons && values.lessons.length} Lessons</h4>
+          <List
+            itemLayout="horizontal"
+            onDragOver={(e) => e.preventDefault()}
+            dataSource={values && values.lessons}
+            renderItem={(item, index) => (
+              <Item
+                draggable
+                onDragStart={(e) => handleDrag(e, index)}
+                onDrop={(e) => handleDrop(e, index)}
+              >
+                <Item.Meta
+                  avatar={<Avatar>{index + 1}</Avatar>}
+                  title={item.title}
+                ></Item.Meta>
+              </Item>
+            )}
+          ></List>
+        </div>
       </div>
     </InstructorRoute>
   );
