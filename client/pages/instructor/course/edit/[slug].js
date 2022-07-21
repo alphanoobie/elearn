@@ -63,32 +63,18 @@ export default function CourseEdit() {
     });
   };
 
-  const handleImageRemove = async (e) => {
-    // console.log('remove inmage')
-    try {
-      setValues({ ...values, loading: true });
-      const res = await axios.post("/api/course/remove-image", { image });
-      setImage({});
-      setPreview("");
-      setUploadButtonText("Upload Image");
-      setValues({ ...values, loading: false });
-    } catch (err) {
-      console.log(err);
-      setValues({ ...values, loading: false });
-      toast("Image upload failed");
-    }
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(values);
     try {
-      const { data } = await axios.post("/api/course", {
+      const { data } = await axios.put("/api/course", {
         ...values,
         image,
       });
-      toast("Great! Now you can start adding lessons!");
-      router.push("/instructor");
+      toast("Course Updated");
+      // router.push("/instructor");
     } catch (err) {
       toast(err.response.data);
       console.log(err);
@@ -109,7 +95,7 @@ export default function CourseEdit() {
             setValues={setValues}
             preview={preview}
             uploadButtonText={uploadButtonText}
-            handleImageRemove={handleImageRemove}
+            editPage = {true}
           />
         }
       </div>
