@@ -1,6 +1,7 @@
-import { Button, Progress, Tooltip } from "antd";
+import { Button, Progress, Switch } from "antd";
 import React from "react";
 import { CloseCircleFilled } from "@ant-design/icons";
+import ReactPlayer from "react-player";
 
 export default function UpdateLessonForm({
   current,
@@ -13,6 +14,7 @@ export default function UpdateLessonForm({
 }) {
   return (
     <div className="container pt-3">
+      {/* {JSON.stringify(current, null, 4)} */}
       <form onSubmit={handleUpdateLesson}>
         <input
           type="text"
@@ -22,7 +24,6 @@ export default function UpdateLessonForm({
           autoFocus
           required
         />
-
         <textarea
           className="form-control mt-3"
           cols="7"
@@ -30,18 +31,22 @@ export default function UpdateLessonForm({
           onChange={(e) => setCurrent({ ...current, content: e.target.value })}
           value={current.content}
         />
+        <div>
+          {!uploading && current.video && current.video.Location && (
+            <div className="pt-2 d-flex justify-content-center">
+              <ReactPlayer
+                url={current.video.Location}
+                width="410px"
+                height="240px"
+                controls
+              />
+            </div>
+          )}
 
-        <div className="d-flex justify-content-center">
           <label className="btn btn-dark btn-block text-left mt-3">
             {uploadVideoButtonText}
             <input onChange={handleVideo} type="file" accept="video/*" hidden />
           </label>
-
-          {!uploading && current.video && values.video.Location && (
-            <div className="pt-2 d-flex justify-content-center">
-              show video player on react player
-            </div>
-          )}
         </div>
 
         {progress > 0 && (
@@ -51,11 +56,16 @@ export default function UpdateLessonForm({
             steps={10}
           />
         )}
-
-        <div className="d-flex justify-content-center pt-2">
-          <span className="pt-3 badge">Preview</span>
+        <div className="d-flex justify-content-between">
+          <span className="pt-3">Preview</span>
+          <Switch
+            className="float-right mt-2"
+            disabled={uploading}
+            defaultChecked={current.free_preview}
+            name="free preview"
+            onChange={(v) => setCurrent({ ...current, free_preview: v })}
+          />
         </div>
-
 
         <Button
           onClick={handleUpdateLesson}
