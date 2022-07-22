@@ -5,7 +5,7 @@ import Resizer from "react-image-file-resizer";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { List, Avatar } from "antd";
+import { List, Avatar, Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
 const { Item } = List;
@@ -25,6 +25,10 @@ export default function CourseEdit() {
   const [image, setImage] = useState({});
   const [preview, setPreview] = useState("");
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
+
+  //state for lesson update
+  const [visible, setVisible] = useState(false);
+  const [current, setCurrent] = useState({});
 
   const router = useRouter();
   const { slug } = router.query;
@@ -129,15 +133,15 @@ export default function CourseEdit() {
     toast("Lessons rearranged successfully");
   };
 
-  const handleDelete = async(index) => {
+  const handleDelete = async (index) => {
     const answer = window.confirm("Are you sure you want to delete");
     if (!answer) return;
     let allLessons = values.lessons;
     const removed = allLessons.splice(index, 1);
     setValues({ ...values, lessons: allLessons });
     //send req to backend
-    const {data} = await axios.put(`/api/course/${slug}/${removed[0]._id}`)
-    console.log('LESSON DELETED =>', data)
+    const { data } = await axios.put(`/api/course/${slug}/${removed[0]._id}`);
+    console.log("LESSON DELETED =>", data);
   };
 
   return (
@@ -178,6 +182,10 @@ export default function CourseEdit() {
                 <Item.Meta
                   avatar={<Avatar>{index + 1}</Avatar>}
                   title={item.title}
+                  onClick={() => {
+                    setVisible(true);
+                    setCurrent(item);
+                  }}
                 ></Item.Meta>
 
                 <DeleteOutlined
@@ -189,6 +197,17 @@ export default function CourseEdit() {
           ></List>
         </div>
       </div>
+
+      <Modal
+        title="Update lesson"
+        centered
+        visible={visible}
+        onCancel={()=>setVisible(false)}
+        footer={null}
+      >
+        update lesson form
+        <pre>{JSON.stringify(current, null, 4)}</pre>
+      </Modal>
     </InstructorRoute>
   );
 }
