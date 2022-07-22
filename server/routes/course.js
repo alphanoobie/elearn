@@ -13,7 +13,8 @@ import {
   uploadVideo,
   removeVideo,
   addLesson,
-  update
+  update,
+  removeLesson,
 } from "../controllers/course";
 
 //image
@@ -32,5 +33,6 @@ router.post(
 );
 router.post("/course/video-remove/:instructorId", requireSignIn, removeVideo);
 router.post("/course/lesson/:slug/:instructorId", requireSignIn, addLesson);
+router.put("/course/:slug/:lessonId", requireSignIn, removeLesson);
 
 module.exports = router;
