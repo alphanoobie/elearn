@@ -7,6 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { List, Avatar, Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
+import UpdateLessonForm from "../../../../components/forms/UpdateLessonForm";
 
 const { Item } = List;
 
@@ -29,6 +30,10 @@ export default function CourseEdit() {
   //state for lesson update
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState({});
+  const [uploadVideoButtonText, setUploadVideoButtonText] =
+    useState("Upload Video");
+  const [progress, setProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
 
   const router = useRouter();
   const { slug } = router.query;
@@ -144,6 +149,16 @@ export default function CourseEdit() {
     console.log("LESSON DELETED =>", data);
   };
 
+  //lesson update functions
+
+  const handleVideo = async () => {
+    //
+  };
+
+  const handleUpdateLesson = async () => {
+    //
+  };
+
   return (
     <InstructorRoute>
       <h1 className="jumbotron text-center">Edit Course</h1>
@@ -202,11 +217,19 @@ export default function CourseEdit() {
         title="Update lesson"
         centered
         visible={visible}
-        onCancel={()=>setVisible(false)}
+        onCancel={() => setVisible(false)}
         footer={null}
       >
-        update lesson form
-        <pre>{JSON.stringify(current, null, 4)}</pre>
+        <UpdateLessonForm
+          handleVideo={handleVideo}
+          handleUpdateLesson={handleUpdateLesson}
+          current={current}
+          setCurrent={setCurrent}
+          uploadVideoButtonText={uploadVideoButtonText}
+          progress={progress}
+          uploading={uploading}
+        />
+        {/* <pre>{JSON.stringify(current, null, 4)}</pre> */}
       </Modal>
     </InstructorRoute>
   );
