@@ -136,7 +136,7 @@ export default function CourseEdit() {
     const removed = allLessons.splice(index, 1);
     setValues({ ...values, lessons: allLessons });
     //send req to backend
-    const {data} = await axios.put(`api/course/${removed[0]._id}`)
+    const {data} = await axios.put(`/api/course/${slug}/${removed[0]._id}`)
     console.log('LESSON DELETED =>', data)
   };
 
