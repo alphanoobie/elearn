@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "prettier": "2.6.2"
+    "prettier": "^2.6.2"
   },
   "scripts": {
     "cutie": "npx prettier --write ."
