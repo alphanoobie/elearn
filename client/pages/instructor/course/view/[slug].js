@@ -111,13 +111,36 @@ export default function CourseView() {
     }
   };
 
-  const handlePublish = (e, courseId) => {
-    //
-  }
+  const handlePublish = async (e, courseId) => {
+    try {
+      let answer = window.confirm(
+        "Once you publish your course it will be live in the market place for users to enroll"
+      );
+      if (!answer) return;
+      const {data} = axios.put(`/api/course/publish/${courseId}`)
+      setCourse(data)
+      toast("Congrats! Your course is now live");
 
-  const handleUnpublish = (e, courseId) => {
-    //
-  }
+    } catch (error) {
+      console.log(error);
+      toast("Course publish failed");
+    }
+  };
+
+  const handleUnpublish = async (e, courseId) => {
+    try {
+      let answer = window.confirm(
+        "Once you Unpublish your course it will be not be available for users to enroll"
+      );
+      const {data} = axios.put(`/api/course/unpublish/${courseId}`)
+      setCourse(data)
+      toast("Your course is Unpublished");
+      if (!answer) return;
+    } catch (error) {
+      console.log(error);
+      toast("Failed to unpublish");
+    }
+  };
 
   return (
     <InstructorRoute>
@@ -159,11 +182,17 @@ export default function CourseView() {
                       </Tooltip>
                     ) : course.published ? (
                       <Tooltip title="Unpublish">
-                        <CloseOutlined onClick={e => handleUnpublish(e, course._id)} className="h5 pointer text-danger"/>
+                        <CloseOutlined
+                          onClick={(e) => handleUnpublish(e, course._id)}
+                          className="h5 pointer text-danger"
+                        />
                       </Tooltip>
                     ) : (
                       <Tooltip title="Publish">
-                        <CheckOutlined onClick={e => handlePublish(e, course._id)} className="h5 pointer text-success"/>
+                        <CheckOutlined
+                          onClick={(e) => handlePublish(e, course._id)}
+                          className="h5 pointer text-success"
+                        />
                       </Tooltip>
                     )}
                   </div>
