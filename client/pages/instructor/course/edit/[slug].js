@@ -151,8 +151,40 @@ export default function CourseEdit() {
 
   //lesson update functions
 
-  const handleVideo = async () => {
-    //
+  const handleVideo = async (e) => {
+    //remove previous video
+    if (current.video && current.video.Location) {
+      const res = await axios.post(
+        `/api/course/video-remove/${values.instructor._id}`,
+        current.video
+      );
+      console.log("REMOVED ===>", res);
+
+      //upload
+      const file = e.target.files[0];
+      setUploadVideoButtonText(file.name);
+      setUploading(true);
+
+      //send video as form data
+      const videoData = new FormData();
+      videoData.append("video", file);
+      videoData.append("courseId", values._id);
+
+      //save progress bar and send video as from data to backend
+      const { data } = await axios.post(
+        `/api/course/video-upload/${values.instructor._id}`,
+        videoData,
+        {
+          onUploadProgress: (e) =>
+            setProgress(Math.round((100 * e.loaded) / e.total)),
+        }
+      );
+      console.log(data)
+      setCurrent({...current, video:data})
+      setUploading(false)
+
+      1;
+    }
   };
 
   const handleUpdateLesson = async () => {
