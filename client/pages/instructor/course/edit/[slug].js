@@ -179,16 +179,24 @@ export default function CourseEdit() {
             setProgress(Math.round((100 * e.loaded) / e.total)),
         }
       );
-      console.log(data)
-      setCurrent({...current, video:data})
-      setUploading(false)
+      console.log(data);
+      setCurrent({ ...current, video: data });
+      setUploading(false);
 
       1;
     }
   };
 
-  const handleUpdateLesson = async () => {
-    //
+  const handleUpdateLesson = async (e) => {
+    e.preventDefault();
+    const { data } = await axios.put(
+      `/api/course/lesson/${slug}/${current._id}`,
+      current
+    );
+    setUploadVideoButtonText('Upload Video')
+    setVisible(false)
+    toast('Lesson Updated')
+    setCourse(data)
   };
 
   return (

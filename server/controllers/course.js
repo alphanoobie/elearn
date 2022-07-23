@@ -228,3 +228,7 @@ export const removeLesson = async(req,res) => {
     console.log(error)
   }
 };
+
+export const updateLesson =async (req,res) => {
+  console.log('Lesson Update')
+}
