@@ -211,7 +211,7 @@ export const update = async (req, res) => {
   }
 };
 
-export const removeLesson = async(req,res) => {
+export const removeLesson = async (req, res) => {
   try {
     const { slug, lessonId } = req.params;
     const course = await Course.findOne({ slug }).exec();
@@ -220,15 +220,42 @@ export const removeLesson = async(req,res) => {
     }
 
     const deletedcourse = await Course.findByIdAndUpdate(course._id, {
-      $pull: {lessons:{_id:lessonId}}
-    }).exec()
+      $pull: { lessons: { _id: lessonId } },
+    }).exec();
 
-    res.json({ok:true})
+    res.json({ ok: true });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
-export const updateLesson =async (req,res) => {
-  console.log('Lesson Update')
-}
+export const updateLesson = async (req, res) => {
+  try {
+    // console.log("UPDATE LESSON", req.body);
+    const { slug } = req.params;
+    const { _id, title, content, video, free_preview } = req.body;
+    const course = await Course.findOne({ slug }).select("instructor").exec();
+
+    if (course.instructor._id != req.auth._id) {
+      return res.status(400).send("Unauthorized");
+    }
+
+    const updated = await Course.updateOne(
+      { "lessons._id": _id },
+      {
+        $set: {
+          "lessons.$.title": title,
+          "lessons.$.content": content,
+          "lessons.$.video": video,
+          "lessons.$.free_preview": free_preview,
+        },
+      },
+      { new: true }
+    ).exec();
+    console.log("UPDATED", updated);
+    res.json({ ok: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send('Update lesson failed')
+  }
+};
