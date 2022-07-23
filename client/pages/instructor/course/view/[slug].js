@@ -117,10 +117,9 @@ export default function CourseView() {
         "Once you publish your course it will be live in the market place for users to enroll"
       );
       if (!answer) return;
-      const {data} = axios.put(`/api/course/publish/${courseId}`)
-      setCourse(data)
+      const { data } = await axios.put(`/api/course/publish/${courseId}`);
+      setCourse(data);
       toast("Congrats! Your course is now live");
-
     } catch (error) {
       console.log(error);
       toast("Course publish failed");
@@ -132,8 +131,8 @@ export default function CourseView() {
       let answer = window.confirm(
         "Once you Unpublish your course it will be not be available for users to enroll"
       );
-      const {data} = axios.put(`/api/course/unpublish/${courseId}`)
-      setCourse(data)
+      const { data } = await axios.put(`/api/course/unpublish/${courseId}`);
+      setCourse(data);
       toast("Your course is Unpublished");
       if (!answer) return;
     } catch (error) {
