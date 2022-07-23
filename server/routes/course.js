@@ -18,7 +18,10 @@ import {
   updateLesson,
   publishCourse,
   unpublishCourse,
+  courses
 } from "../controllers/course";
+
+router.get('/courses', courses)
 
 //image
 router.post("/course/upload-image", uploadImage);
