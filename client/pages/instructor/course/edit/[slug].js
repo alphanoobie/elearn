@@ -161,6 +161,7 @@ export default function CourseEdit() {
       console.log("REMOVED ===>", res);
 
       //upload
+      console.log(e.target.files);
       const file = e.target.files[0];
       setUploadVideoButtonText(file.name);
       setUploading(true);
@@ -182,8 +183,6 @@ export default function CourseEdit() {
       console.log(data);
       setCurrent({ ...current, video: data });
       setUploading(false);
-
-      1;
     }
   };
 
@@ -200,6 +199,7 @@ export default function CourseEdit() {
       const index = arr.findIndex((el) => el._id === current._id);
       arr[index] = current;
       setValues({ ...values, lessons: arr });
+      setProgress(0)
       toast("Lesson Updated");
     }
   };
