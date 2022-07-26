@@ -472,3 +472,21 @@ export const listCompleted = async (req, res) => {
     console.log(error);
   }
 };
+
+export const markIncomplete = async (req, res) => {
+  try {
+    const { courseId, lessonId } = req.body;
+    const updated = await Completed.findOneAndUpdate(
+      {
+        user: req.auth._id,
+        course: courseId,
+      },
+      {
+        $pull: { lessons: lessonId },
+      }
+    ).exec();
+    res.json({ok:true})
+  } catch (error) {
+    console.log(error);
+  }
+};
