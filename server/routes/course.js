@@ -22,10 +22,11 @@ import {
   checkEnrollment,
   freeEnrollment,
   paidEnrollment,
-  stripeSuccess
+  stripeSuccess,
+  userCourses,
 } from "../controllers/course";
 
-router.get('/courses', courses)
+router.get("/courses", courses);
 
 //image
 router.post("/course/upload-image", uploadImage);
@@ -51,13 +52,14 @@ router.post("/course/lesson/:slug/:instructorId", requireSignIn, addLesson);
 router.put("/course/:slug/:lessonId", requireSignIn, removeLesson);
 router.put("/course/lesson/:slug/:instructorId", requireSignIn, updateLesson);
 
-router.get('/check-enrollment/:courseId', requireSignIn, checkEnrollment)
+router.get("/check-enrollment/:courseId", requireSignIn, checkEnrollment);
 
 //enrollment
-router.post('/free-enrollment/:courseId', requireSignIn, freeEnrollment)
-router.post('/paid-enrollment/:courseId', requireSignIn, paidEnrollment)
+router.post("/free-enrollment/:courseId", requireSignIn, freeEnrollment);
+router.post("/paid-enrollment/:courseId", requireSignIn, paidEnrollment);
 
-router.get('/stripe-success/:courseId', requireSignIn, stripeSuccess)
+router.get("/stripe-success/:courseId", requireSignIn, stripeSuccess);
 
+router.get("/user-courses", requireSignIn, userCourses);
 
 module.exports = router;
