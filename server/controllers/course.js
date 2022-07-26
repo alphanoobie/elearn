@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import Course from "../models/course";
 import slugify from "slugify";
 import { readFileSync } from "fs";
+import user from "../models/user";
 
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -95,7 +96,7 @@ export const create = async (req, res) => {
 };
 
 export const read = async (req, res) => {
-  console.log("single course read", req.params.slug)
+  console.log("single course read", req.params.slug);
   try {
     const course = await Course.findOne({ slug: req.params.slug })
       .populate("instructor", "_id name")
@@ -305,5 +306,20 @@ export const courses = async (req, res) => {
   const all = await Course.find({ published: true })
     .populate("instructor", "_id name")
     .exec();
-    res.json(all)
+  res.json(all);
+};
+
+export const checkEnrollment = async (req, res) => {
+  const { courseId } = req.params;
+  const user = await user.findById(req.auth._id).exec();
+
+  //check if course is found user courses
+  let ids = [];
+  for (let i = 0; i < user.courses.length; i++) {
+    ids, push(user.courses[i].toString());
+  }
+  res.json({
+    status:ids.includes(courseId),
+    course : await Course.findById(courseId).exec()
+  })
 };
