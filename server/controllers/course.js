@@ -359,7 +359,7 @@ export const paidEnrollment = async (req, res) => {
     // application fee 30%
     const fee = (course.price * 30) / 100;
     //create stripe session
-    const session = await stripe.checkout.session.create({
+    const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       //purchase details
       line_items: [
@@ -373,7 +373,9 @@ export const paidEnrollment = async (req, res) => {
       //charge buyer and transfer remaining to seller after fee
       payment_intent_data: {
         application_fee_amount: Math.round(fee.toFixed(2) * 100),
-        destination: course.instructor.stripe_account_id,
+        transfer_data: {
+          destination: course.instructor.stripe_account_id,
+        },
       },
       //redirect url after success pay
       success_url: `${process.env.STRIPE_SUCCESS_URL}/${course._id}`,
