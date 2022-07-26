@@ -1,6 +1,6 @@
 import express from "express";
 import formidable from "express-formidable";
-import { isInstructor, requireSignIn } from "../middlewares";
+import { isInstructor, requireSignIn, isEnrolled } from "../middlewares";
 
 const router = express.Router();
 
@@ -61,5 +61,8 @@ router.post("/paid-enrollment/:courseId", requireSignIn, paidEnrollment);
 router.get("/stripe-success/:courseId", requireSignIn, stripeSuccess);
 
 router.get("/user-courses", requireSignIn, userCourses);
+router.get("/user/course/:slug",requireSignIn, isEnrolled, read);
+
+
 
 module.exports = router;
