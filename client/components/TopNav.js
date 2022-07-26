@@ -41,7 +41,7 @@ export default function TopNav() {
   };
 
   return (
-    <Menu mode="horizontal" selectedKeys={[current]} className="mb-2">
+    <Menu theme='dark' mode="horizontal" selectedKeys={[current]} className="mb-2">
       <Item
         key="/"
         onClick={(e) => setCurrent(e.key)}
