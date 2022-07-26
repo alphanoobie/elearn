@@ -23,6 +23,8 @@ const SingleCourse = () => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState({ lessons: [] });
   const [completedLessons, setCompletedLessons] = useState([]);
+  //force state update
+  const [updateState, setUpdateState] = useState(false);
 
   useEffect(() => {
     if (course) loadCompletedLessons();
@@ -47,11 +49,16 @@ const SingleCourse = () => {
 
   const markCompleted = async () => {
     // console.log("SEND THIS LESSON ID TO MARK AS COMPLETED");
-    const { data } = await axios.post(`/api/mark-completed`, {
-      courseId: course._id,
-      lessonId: course.lessons[clicked]._id,
-    });
-    console.log(data);
+    try {
+      const { data } = await axios.post(`/api/mark-completed`, {
+        courseId: course._id,
+        lessonId: course.lessons[clicked]._id,
+      });
+      console.log(data);
+      setCompletedLessons([...completedLessons, course.lessons[clicked]._id]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const markIncomplete = async () => {
@@ -61,6 +68,13 @@ const SingleCourse = () => {
       lessonId: course.lessons[clicked]._id,
     });
     console.log(data);
+    const all = completedLessons;
+    const index = all.indexOf(course.lessons[clicked]._id);
+    if (index > -1) {
+      all.splice(index, 1);
+      setCompletedLessons(all);
+      setUpdateState(!updateState);
+    }
   };
 
   return (
@@ -109,14 +123,14 @@ const SingleCourse = () => {
                 <b>{course.lessons[clicked].title.substring(0, 30)}</b>
 
                 {completedLessons.includes(course.lessons[clicked]._id) ? (
-                  <span className="float-right pointer" onClick={markIncomplete}>
+                  <span
+                    className="float-right pointer"
+                    onClick={markIncomplete}
+                  >
                     Mark as incomplete
                   </span>
                 ) : (
-                  <span
-                    className="float-right pointer"
-                    onClick={markCompleted}
-                  >
+                  <span className="float-right pointer" onClick={markCompleted}>
                     Mark as completed
                   </span>
                 )}
@@ -133,6 +147,7 @@ const SingleCourse = () => {
                         url={course.lessons[clicked].video.Location}
                         width="100%"
                         height="100%"
+                        onEnded={() => markCompleted()}
                       />
                     </div>
                   </>
