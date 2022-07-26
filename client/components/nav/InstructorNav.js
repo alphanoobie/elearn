@@ -26,6 +26,17 @@ export default function InstructorNav() {
           Create Course
         </a>
       </Link>
+
+
+      <Link href="/instructor/revenue">
+        <a
+          className={`nav-link ${
+            current === "/instructor/revenue" && "active"
+          }`}
+        >
+          Revenue
+        </a>
+      </Link>
     </div>
   );
 }
