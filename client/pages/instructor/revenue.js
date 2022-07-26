@@ -6,12 +6,13 @@ import React from "react";
 import {
   DollarOutlined,
   SettingOutlined,
-  LoadingOutlined,
+  SyncOutlined,
 } from "@ant-design/icons";
 import { stripeCurrencyFormatter } from "../../utils/helpers";
 
 export default function InstructorRevenue() {
   const [balance, setBalance] = useState({ pending: [] });
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     sendBalanceRequest();
@@ -23,8 +24,18 @@ export default function InstructorRevenue() {
     setBalance(data);
   };
 
-  const handlePayoutSettings = () => {
-    console.log("handle payout");
+  const handlePayoutSettings = async() => {
+    // console.log("handle payout");
+    try {
+        setLoading(true)
+        const {data} = await axios.get('/api/instructor/payout-settings')
+        window.location.href= data
+        
+    } catch (error) {
+        setLoading(false)
+      console.log(error);
+      alert('unable to access payout settings')
+    }
   };
 
   return (
@@ -50,11 +61,11 @@ export default function InstructorRevenue() {
             <small>For last 48 hours</small>
             <hr />
             <h4>
-              Payouts{" "}
-              <SettingOutlined
+              Payouts
+              {!loading ? (<SettingOutlined
                 className="float-right pointer"
                 onClick={handlePayoutSettings}
-              />
+              />):(<SyncOutlined spin className="flaot-right pointer"/>)}
             </h4>
             <small>
               Update your strip account details/ view previous payouts

@@ -100,8 +100,21 @@ export const instructorBalance = async (req, res) => {
     const balance = await stripe.balance.retrieve({
       stripeAccount: user.stripe_account_id,
     });
-    res.json(balance)
+    res.json(balance);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const instructorPayoutSettings = async (req, res) => {
+  try {
+    const user = await User.findById(req.auth._id).exec();
+    const loginLink = await stripe.accounts.createLoginLink(
+      user.stripe_seller.id,
+      { redirect_url: process.env.STRIPE_SETTINGS_REDIRECT }
+    );
+    res.json(loginLink.url);
+  } catch (error) {
+    console.log("STRIPE PAYOUT LINK ERROR", error);
   }
 };
