@@ -20,6 +20,11 @@ const SingleCourse = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState({ lessons: [] });
+  const [completedLessons, setCompletedLessons] = useState([])
+
+  useEffect(() => {
+    if (course) loadCompletedLessons();
+  }, [course]);
 
   useEffect(() => {
     if (slug) loadCourse();
@@ -30,14 +35,21 @@ const SingleCourse = () => {
     setCourse(data);
   };
 
+  const loadCompletedLessons = async () => {
+    const { data } = await axios.post("/api/list-completed", {
+      courseId: course._id,
+    });
+    console.log('COMPLETED LESSONS', data)
+    setCompletedLessons(data)
+  };
+
   const markCompleted = async () => {
     // console.log("SEND THIS LESSON ID TO MARK AS COMPLETED");
     const { data } = await axios.post(`/api/mark-completed`, {
       courseId: course._id,
       lessonId: course.lessons[clicked]._id,
     });
-    console.log(data)
-    
+    console.log(data);
   };
 
   return (

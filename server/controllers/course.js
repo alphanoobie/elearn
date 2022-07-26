@@ -460,3 +460,15 @@ export const markCompleted = async (req, res) => {
     res.json({ ok: true });
   }
 };
+
+export const listCompleted = async (req, res) => {
+  try {
+    const list = await Completed.findOne({
+      user: req.auth._id,
+      course: req.body.courseId,
+    }).exec();
+    list && res.json(list.lessons);
+  } catch (error) {
+    console.log(error);
+  }
+};
