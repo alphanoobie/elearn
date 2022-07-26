@@ -9,7 +9,8 @@ import {
   getAccountStatus,
   currentInstructor,
   instructorCourses,
-  studentCount
+  studentCount,
+  instructorBalance
 } from "../controllers/instructor";
 
 router.post("/make-instructor", requireSignIn, makeInstructor);
@@ -19,5 +20,7 @@ router.get("/current-instructor", requireSignIn, currentInstructor);
 router.get("/instructor-courses", requireSignIn, instructorCourses);
 
 router.post('/instructor/student-count', requireSignIn, studentCount )
+
+router.get('/instructor/balance', requireSignIn, instructorBalance)
 
 module.exports = router;
