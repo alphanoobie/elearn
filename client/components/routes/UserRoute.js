@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { SyncOutlined } from "@ant-design/icons";
 import UserNav from "../nav/UserNav";
 
-export default function UserRoute({ children }) {
+export default function UserRoute({ children, showNav = true }) {
   const [ok, setOk] = useState(false);
 
   const router = useRouter();
@@ -36,9 +36,7 @@ export default function UserRoute({ children }) {
       ) : (
         <div className="container-fluid">
           <div className="row">
-            <div className="col-md-2">
-              <UserNav />
-            </div>
+            <div className="col-md-2">{showNav && <UserNav />}</div>
             <div className="col-md-10">{children}</div>
           </div>
         </div>
