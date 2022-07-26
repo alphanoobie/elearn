@@ -316,12 +316,35 @@ export const checkEnrollment = async (req, res) => {
 
   //check if course is found user courses
   let ids = [];
-  let length = user.courses && user.courses.length
+  let length = user.courses && user.courses.length;
   for (let i = 0; i < length; i++) {
-    ids, push(user.courses[i].toString());
+    ids.push(user.courses[i].toString());
   }
   res.json({
-    status:ids.includes(courseId),
-    course : await Course.findById(courseId).exec()
-  })
+    status: ids.includes(courseId),
+    course: await Course.findById(courseId).exec(),
+  });
+};
+
+export const freeEnrollment = async (req, res) => {
+  try {
+    //check if course is free
+    const course = await Course.findById(req.params.courseId).exec();
+    if (course.paid) return;
+
+    const result = await User.findByIdAndUpdate(
+      req.auth._id,
+      {
+        $addToSet: { courses: course._id },
+      },
+      { new: true }
+    ).exec();
+    res.json({
+      message: "Congrats! You have successfully enrolled",
+      course,
+    });
+  } catch (error) {
+    console.log("free enrollment error", error);
+    return res.status(400).send("Enrollment Failed");
+  }
 };
