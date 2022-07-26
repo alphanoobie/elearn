@@ -10,6 +10,8 @@ const SingleCourse = ({ course }) => {
   const [showModal, setShowModal] = useState(false);
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
+  const [enrolled, setEnrolled] = useState({});
+  
   
   //context
   const {state:{user}} = useContext(Context)
@@ -25,6 +27,16 @@ const SingleCourse = ({ course }) => {
     console.log('handle free enrollment')
   }
 
+  const checkEnrollment = async() => {
+    const {data} = await axios.get(`/api/check-enrollment/${course._id}`)
+    setEnrolled(data)
+    console.log('CHECK ENROLLMENT', data)
+  }
+
+useEffect(() => {
+  if (user && course) checkEnrollment()
+}, [user, course]);
+
   return (
     <>
       <SingleCourseJumbotron
@@ -37,6 +49,8 @@ const SingleCourse = ({ course }) => {
         loading={loading}
         handlePaidEnrollment={handlePaidEnrollment}
         handleFreeEnrollment={handleFreeEnrollment}
+        enrolled={enrolled}
+        setEnrolled={setEnrolled}
       />
 
       <PreviewModal

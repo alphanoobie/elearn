@@ -14,6 +14,8 @@ export default function SingleCourseJumbotron({
   user,
   handlePaidEnrollment,
   handleFreeEnrollment,
+  enrolled,
+  setEnrolled,
 }) {
   const {
     name,
@@ -88,7 +90,11 @@ export default function SingleCourseJumbotron({
               disabled={loading}
               onClick={paid ? handlePaidEnrollment : handleFreeEnrollment}
             >
-              {user ? "Enroll" : "Login to enroll"}
+              {user
+                ? enrolled.status
+                  ? "Go to course"
+                  : "Enroll"
+                : "Login to enroll"}
             </Button>
           )}
         </div>
