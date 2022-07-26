@@ -21,7 +21,8 @@ import {
   courses,
   checkEnrollment,
   freeEnrollment,
-  paidEnrollment
+  paidEnrollment,
+  stripeSuccess
 } from "../controllers/course";
 
 router.get('/courses', courses)
@@ -55,4 +56,8 @@ router.get('/check-enrollment/:courseId', requireSignIn, checkEnrollment)
 //enrollment
 router.post('/free-enrollment/:courseId', requireSignIn, freeEnrollment)
 router.post('/paid-enrollment/:courseId', requireSignIn, paidEnrollment)
+
+router.get('/stripe-success/:courseId', requireSignIn, stripeSuccess)
+
+
 module.exports = router;
