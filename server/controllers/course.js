@@ -4,6 +4,8 @@ import Course from "../models/course";
 import slugify from "slugify";
 import { readFileSync } from "fs";
 import User from "../models/user";
+import Completed from "../models/completed";
+import user from "../models/user";
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 const awsConfig = {
@@ -425,4 +427,36 @@ export const userCourses = async (req, res) => {
     .populate("instructor", "_id name")
     .exec();
   res.json(courses);
+};
+
+export const markCompleted = async (req, res) => {
+  const { courseId, lessonId } = req.body;
+  // console.log(courseId, lessonId)
+  //find if user with that course is already created
+  const existing = await Completed.findOne({
+    user: req.auth._id,
+    course: courseId,
+  }).exec();
+
+  if (existing) {
+    //update
+    const updated = await Completed.findOneAndUpdate(
+      {
+        user: req.auth._id,
+        course: courseId,
+      },
+      {
+        $addToSet: { lessons: lessonId },
+      }
+    ).exec();
+    res.json({ ok: true });
+  } else {
+    //create new
+    const created = await new Completed({
+      user: req.auth._id,
+      course: courseId,
+      lessons: lessonId,
+    }).save();
+    res.json({ ok: true });
+  }
 };
