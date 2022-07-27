@@ -3,6 +3,8 @@
     "prettier": "^2.6.2"
   },
   "scripts": {
-    "cutie": "npx prettier --write ."
+    "cutie": "npx prettier --write .",
+    "start": "node backend/server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
   }
 }
