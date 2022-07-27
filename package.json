@@ -6,7 +6,6 @@
     "prettier": "^2.6.2"
   },
   "scripts": {
-    "cutie": "npx prettier --write .",
-    "start": "node server/server.js"
+    "cutie": "npx prettier --write ."
   }
 }
