@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { readdirSync } from "fs";
-import morgan from "morgan";
+// import morgan from "morgan";
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
 import mongoose from "mongoose";
@@ -20,7 +20,7 @@ mongoose
 //middlewares
 app.use(cors());
 app.use(express.json({ limit: "5mb" }));
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 // app.use((req, res, next) => {
 //   console.log("this is my own middleware");
 //   next();
