@@ -57,3 +57,6 @@ This page can be used to create a new course. An instructor can add basic detail
 - Image of the course
 ![create course](https://user-images.githubusercontent.com/69296939/188370322-6046cf9b-db97-4489-baf1-35a8a0eaae15.png)
 
+
+# Credits
+This project was created by following the tutorial [**FullStack JavaScript React Node MERN eLearning Marketplace**](https://www.udemy.com/course/nextjs-react-node-aws-mern-lms-elearning-udemy-clone/) on [**Udemy**](https://www.udemy.com/) by [**Ryan Dhungel**](https://www.udemy.com/user/e4938520-fe50-4d1b-b78d-4188406b14a9/)
