@@ -4,7 +4,9 @@
 
 # Project Description
 
-    E-Learn is a online course marketplace where users can purchase and view courses. Courses can be in the form of video and text lectures. Users can also sign up to be an instructor, to publish courses on the marketplace. 
+    E-Learn is a online course marketplace where users can purchase and view courses. 
+    Courses can be in the form of video and text lectures. 
+    Users can also sign up to be an instructor, to publish courses on the marketplace. 
 
 # How To Run The Project Locally?
 
